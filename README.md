@@ -6,4 +6,4 @@
 * Install [SWI-Prolog](https://www.swi-prolog.org/Download.html)
 * Download the repository LPTP-LLM-99
 * Point Claude to your copy of LPTP-LLM-99
-* Ask it to solve one of the first P-99 Prolog problems
+* Ask it to solve one of the first [P-99 Prolog problems](https://www.ic.unicamp.br/~meidanis/courses/mc336/2009s2/prolog/problemas/)
