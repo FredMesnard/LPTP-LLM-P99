@@ -19,4 +19,3 @@ This is **P01** from the 99 Prolog Problems series. The task is to find the last
 ## Conventions
 
 - Solutions should define the predicate specified in the problem description.
-- Use standard Prolog naming: lowercase predicates, uppercase variables.
