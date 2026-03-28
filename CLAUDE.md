@@ -20,7 +20,7 @@ The problems are listed in `P-99.html`.  Each problem lives in a `Pxx/` director
 
 ## Conventions
 
-- **Prolog** strictly ISO-compatible, `=` (equality, i.e., unification),  `\+` (negation as failure), and `( Test -> Then ; Else)` (the `if-then-else`construct) are allowed, but no cut, no other built-in.
+- **Prolog** strictly ISO-compatible, `=` (unification with occurs-check),  `\+` (negation as failure), and `( Test -> Then ; Else)` (the `if-then-else`construct) are allowed, but no cut, no other built-in.
 - Use predicates from the LPTP lib when available, as it will help for the proofs.
 - Peano naturals: `0`, `s(0)`, `s(s(0))`, ... using the LPTP nat library.
 - Hierarchical lemma names: `predicate:property` or `predicate:property:variant`.
@@ -63,4 +63,4 @@ Each `pXX-experiment-report.md` should contain:
 
 - Code, lemma names, and LPTP proofs: English.
 - Experiment reports and documentation: English.
-- Conversation with the user: French (the user's preferred language).
+
