@@ -1,0 +1,288 @@
+/* p01.pr — Formal proofs for P01: Find the last element of a list */
+
+:- initialize.
+
+:- tex_file($(tmp)/p01).
+:- thm_file($(tmp)/p01).
+
+:- needs_gr($(tmp)/p01).
+:- needs_gr($(lib)/list/list).
+:- needs_thm($(lib)/list/list).
+
+% ============================================================
+% 1. Termination
+% If L is a proper list, then my_last(X, L) terminates.
+% ============================================================
+
+:- lemma(my_last:termination,
+all [x,l]: succeeds list(?l) => terminates my_last(?x,?l),
+[induction(
+  [all l: succeeds list(?l) =>
+    (all x: terminates my_last(?x,?l))],
+  [step([],
+    [],
+    terminates my_last(?x,[]) by completion,
+    all x: terminates my_last(?x,[])),
+   step([y,l],
+    [all x: terminates my_last(?x,?l),
+     succeeds list(?l)],
+    terminates my_last(?x,[?y|?l]) by completion,
+    all x: terminates my_last(?x,[?y|?l]))]),
+ assume(succeeds list(?l),
+  [all x: terminates my_last(?x,?l),
+   terminates my_last(?x,?l)],
+  terminates my_last(?x,?l))]
+).
+
+% ============================================================
+% 2. Types
+% If my_last(X, L) succeeds, then L is a proper list.
+% ============================================================
+
+:- lemma(my_last:types,
+all [x,l]: succeeds my_last(?x,?l) => succeeds list(?l),
+induction(
+ [all [x,l]: succeeds my_last(?x,?l) => succeeds list(?l)],
+ [step([x],
+   [],
+   [succeeds list([]),
+    succeeds list([?x])],
+   succeeds list([?x])),
+  step([x,y,l],
+   [succeeds list(?l),
+    succeeds my_last(?x,?l)],
+   [],
+   succeeds list([?y|?l]))])
+).
+
+% ============================================================
+% 3. Groundness
+% If my_last(X, L) succeeds and L is ground, then X is ground.
+% ============================================================
+
+:- lemma(my_last:ground,
+all [x,l]: succeeds my_last(?x,?l) & gr(?l) => gr(?x),
+[induction(
+  [all [x,l]: succeeds my_last(?x,?l) => gr(?l) => gr(?x)],
+  [step([x],
+    [],
+    assume(gr([?x]),
+     [],
+     gr(?x)),
+    gr([?x]) => gr(?x)),
+   step([x,y,l],
+    [gr(?l) => gr(?x),
+     succeeds my_last(?x,?l)],
+    assume(gr([?y|?l]),
+     [],
+     gr(?x)),
+    gr([?y|?l]) => gr(?x))]),
+ assume(succeeds my_last(?x,?l) & gr(?l),
+  [gr(?l) => gr(?x),
+   gr(?x)],
+  gr(?x))]
+).
+
+% ============================================================
+% 4. Membership
+% If my_last(X, L) succeeds, then X is a member of L.
+% ============================================================
+
+:- lemma(my_last:member,
+all [x,l]: succeeds my_last(?x,?l) => succeeds member(?x,?l),
+induction(
+ [all [x,l]: succeeds my_last(?x,?l) => succeeds member(?x,?l)],
+ [step([x],
+   [],
+   succeeds member(?x,[?x]),
+   succeeds member(?x,[?x])),
+  step([x,y,l],
+   [succeeds member(?x,?l),
+    succeeds my_last(?x,?l)],
+   [],
+   succeeds member(?x,[?y|?l]))])
+).
+
+% ============================================================
+% 5. Uniqueness
+% If my_last(X, L) and my_last(Y, L) both succeed, then X = Y.
+% ============================================================
+
+:- lemma(my_last:uniqueness,
+all [x,l]: succeeds my_last(?x,?l) =>
+  (all y: succeeds my_last(?y,?l) => ?x = ?y),
+induction(
+ [all [x,l]: succeeds my_last(?x,?l) =>
+   (all y: succeeds my_last(?y,?l) => ?x = ?y)],
+ [step([x],
+   [],
+   assume(succeeds my_last(?y,[?x]),
+    [def succeeds my_last(?y,[?x]) by completion,
+     cases(
+       ?y = ?x,
+       [?x = ?y],
+       succeeds my_last(?y,[]),
+       [def succeeds my_last(?y,[]) by completion,
+        ff],
+       ?x = ?y)],
+    ?x = ?y),
+   all y: succeeds my_last(?y,[?x]) => ?x = ?y),
+  step([x,z,l],
+   [all y: succeeds my_last(?y,?l) => ?x = ?y,
+    succeeds my_last(?x,?l)],
+   assume(succeeds my_last(?w,[?z|?l]),
+    [def succeeds my_last(?w,[?z|?l]) by completion,
+     cases(
+       ?w = ?z & ?l = [],
+       [succeeds my_last(?x,?l),
+        def succeeds my_last(?x,[]) by completion,
+        ff],
+       succeeds my_last(?w,?l),
+       [?x = ?w],
+       ?x = ?w)],
+    ?x = ?w),
+   all w: succeeds my_last(?w,[?z|?l]) => ?x = ?w)])
+).
+
+% ============================================================
+% 6. Existence (auxiliary)
+% For any Z and proper list L, my_last succeeds on [Z|L].
+% ============================================================
+
+:- lemma(my_last:existence:aux,
+all [z,l]: succeeds list(?l) => (ex x: succeeds my_last(?x,[?z|?l])),
+[induction(
+  [all l: succeeds list(?l) =>
+    (all z: ex x: succeeds my_last(?x,[?z|?l]))],
+  [step([],
+    [],
+    [succeeds my_last(?z,[?z]),
+     ex x: succeeds my_last(?x,[?z])],
+    all z: ex x: succeeds my_last(?x,[?z])),
+   step([y,l],
+    [all z: ex x: succeeds my_last(?x,[?z|?l]),
+     succeeds list(?l)],
+    [ex x: succeeds my_last(?x,[?y|?l]),
+     exist(x,
+      succeeds my_last(?x,[?y|?l]),
+      [succeeds my_last(?x,[?z,?y|?l]),
+       ex x: succeeds my_last(?x,[?z,?y|?l])],
+      ex x: succeeds my_last(?x,[?z,?y|?l]))],
+    all z: ex x: succeeds my_last(?x,[?z,?y|?l]))]),
+ assume(succeeds list(?l),
+  [all z: ex x: succeeds my_last(?x,[?z|?l]),
+   ex x: succeeds my_last(?x,[?z|?l])],
+  ex x: succeeds my_last(?x,[?z|?l]))]
+).
+
+% ============================================================
+% 7. Existence (main)
+% If L is a non-empty proper list, then my_last(X,L) succeeds.
+% ============================================================
+
+:- theorem(my_last:existence,
+all l: succeeds list(?l) & ?l <> [] =>
+  (ex x: succeeds my_last(?x,?l)),
+assume(succeeds list(?l) & ?l <> [],
+ [def succeeds list(?l) by completion,
+  cases(
+    ?l = [],
+    [ff],
+    ex [z,l1]: ?l = [?z|?l1] & succeeds list(?l1),
+    [exist([z,l1],
+      ?l = [?z|?l1] & succeeds list(?l1),
+      [ex x: succeeds my_last(?x,[?z|?l1])
+        by lemma(my_last:existence:aux),
+       ex x: succeeds my_last(?x,?l)],
+      ex x: succeeds my_last(?x,?l))],
+    ex x: succeeds my_last(?x,?l))],
+ ex x: succeeds my_last(?x,?l))
+).
+
+% ============================================================
+% 8. Append characterization (forward)
+% If my_last(X,L) succeeds, then L = L1 ++ [X] for some L1.
+% ============================================================
+
+:- theorem(my_last:append,
+all [x,l]: succeeds my_last(?x,?l) =>
+ (ex l1: succeeds append(?l1,[?x],?l)),
+induction(
+ [all [x,l]: succeeds my_last(?x,?l) =>
+   (ex l1: succeeds append(?l1,[?x],?l))],
+ [step([x],
+   [],
+   [succeeds append([],[?x],[?x]),
+    ex l1: succeeds append(?l1,[?x],[?x])],
+   ex l1: succeeds append(?l1,[?x],[?x])),
+  step([x,y,l],
+   [ex l1: succeeds append(?l1,[?x],?l),
+    succeeds my_last(?x,?l)],
+   exist(l1,
+    succeeds append(?l1,[?x],?l),
+    [succeeds append([?y|?l1],[?x],[?y|?l]),
+     ex l1: succeeds append(?l1,[?x],[?y|?l])],
+    ex l1: succeeds append(?l1,[?x],[?y|?l])),
+   ex l1: succeeds append(?l1,[?x],[?y|?l]))])
+).
+
+% ============================================================
+% 9. Append characterization (converse, auxiliary)
+% If list(L1) and append(L1,[X],L), then my_last(X,L).
+% ============================================================
+
+:- lemma(my_last:append:converse:aux,
+all [x,l1,l]: succeeds list(?l1) & succeeds append(?l1,[?x],?l) =>
+ succeeds my_last(?x,?l),
+[induction(
+  [all l1: succeeds list(?l1) =>
+    (all [x,l]: succeeds append(?l1,[?x],?l) =>
+      succeeds my_last(?x,?l))],
+  [step([],
+    [],
+    assume(succeeds append([],[?x],?l),
+     [def succeeds append([],[?x],?l) by completion,
+      ?l = [?x],
+      succeeds my_last(?x,[?x])],
+     succeeds my_last(?x,?l)),
+    all [x,l]: succeeds append([],[?x],?l) =>
+      succeeds my_last(?x,?l)),
+   step([z,l1],
+    [all [x,l]: succeeds append(?l1,[?x],?l) =>
+      succeeds my_last(?x,?l),
+     succeeds list(?l1)],
+    assume(succeeds append([?z|?l1],[?x],?l),
+     [def succeeds append([?z|?l1],[?x],?l) by completion,
+      ex l3: ?l = [?z|?l3] & succeeds append(?l1,[?x],?l3),
+      exist(l3,
+       ?l = [?z|?l3] & succeeds append(?l1,[?x],?l3),
+       [succeeds my_last(?x,?l3),
+        succeeds my_last(?x,[?z|?l3]),
+        succeeds my_last(?x,?l)],
+       succeeds my_last(?x,?l))],
+     succeeds my_last(?x,?l)),
+    all [x,l]: succeeds append([?z|?l1],[?x],?l) =>
+      succeeds my_last(?x,?l))]),
+ assume(succeeds list(?l1) & succeeds append(?l1,[?x],?l),
+  [all [x,l]: succeeds append(?l1,[?x],?l) =>
+    succeeds my_last(?x,?l),
+   succeeds my_last(?x,?l)],
+  succeeds my_last(?x,?l))]
+).
+
+% ============================================================
+% 10. Append characterization (converse, main)
+% If append(L1,[X],L) succeeds, then my_last(X,L).
+% ============================================================
+
+:- theorem(my_last:append:converse,
+all [x,l1,l]: succeeds append(?l1,[?x],?l) =>
+ succeeds my_last(?x,?l),
+assume(succeeds append(?l1,[?x],?l),
+ [succeeds list(?l1) by lemma(append:types:1),
+  succeeds my_last(?x,?l) by
+   lemma(my_last:append:converse:aux)],
+ succeeds my_last(?x,?l))
+).
+
+:- bye(p01).

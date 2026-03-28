@@ -1,0 +1,8 @@
+:- assert_clauses(n(my_last,2),[
+ clause([n(my_last,2),$(x),[n('.',2),$(x),[n([],0)]]],
+  [&],
+  [x]/0),
+ clause([n(my_last,2),$(x),[n('.',2),$(y),$(l)]],
+  [n(my_last,2),$(x),$(l)],
+  [x,y,l]/0)
+]).
