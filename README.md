@@ -2,7 +2,7 @@
 
 
 * Install [LPTP](https://github.com/FredMesnard/LPTP) locally
-* Read and practice chapter 1 of the user manual
+* Read chapter 1 of the user manual
 * Install [SWI-Prolog](https://www.swi-prolog.org/Download.html)
 * Download the repository LPTP-LLM-P99
 * Point Claude to your copy of LPTP-LLM-P99
