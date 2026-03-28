@@ -1,7 +1,8 @@
 # Data for a second experiment in LLM-enhanced LPTP development
 
 
-* Install [LPTP](https://github.com/FredMesnard/LPTP) locally
+* Install [Gnu-Prolog](http://www.gprolog.org)
+* Install [LPTP](https://github.com/FredMesnard/LPTP) locally and compile it with Gnu-Prolog
 * Read chapter 1 of the user manual
 * Install [SWI-Prolog](https://www.swi-prolog.org/Download.html)
 * Download this repository `LPTP-LLM-P99`and decompress it
