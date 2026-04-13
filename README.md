@@ -11,5 +11,5 @@
 * Point Claude to your local copy of `LPTP-LLM-P99-main`
 * Ask Claude Code to read `CLAUDE.md` and `lptp-reference.md` 
 * Ask Claude Code to solve the second exercise of [P-99 Prolog problems](https://www.ic.unicamp.br/~meidanis/courses/mc336/2009s2/prolog/problemas/)
-* Evaluate the output and if necessary interact with Claude Code to improve the solution.
-* Idem for the remaining P99 exercises.  
+* Evaluate the output and if necessary interact with Claude Code to improve the solution
+* Idem for the remaining P99 exercises
