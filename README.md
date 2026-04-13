@@ -9,7 +9,7 @@
 * Update the file `CLAUDE.md` wrt your installation
 * Update the file `lptp-reference.md` wrt your installation
 * Point Claude to your local copy of `LPTP-LLM-P99-main`
-* Ask Claude to read `CLAUDE.md` and `lptp-reference.md` 
-* Ask Claude to solve the second exercise of [P-99 Prolog problems](https://www.ic.unicamp.br/~meidanis/courses/mc336/2009s2/prolog/problemas/)
-* Evaluate the output and if necessary interact with Claude to improve the solution.
+* Ask Claude Code to read `CLAUDE.md` and `lptp-reference.md` 
+* Ask Claude Code to solve the second exercise of [P-99 Prolog problems](https://www.ic.unicamp.br/~meidanis/courses/mc336/2009s2/prolog/problemas/)
+* Evaluate the output and if necessary interact with Claude Code to improve the solution.
 * Idem for the remaining P99 exercises.  
