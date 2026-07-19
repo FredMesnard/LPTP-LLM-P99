@@ -1,4 +1,4 @@
-# Solving P99 in LLM-enhanced LPTP development
+# Solving P99 in an LLM-enhanced LPTP development
 
 * Install [Gnu-Prolog](http://www.gprolog.org)
 * Install [LPTP](https://github.com/FredMesnard/LPTP) locally and compile it with Gnu-Prolog
