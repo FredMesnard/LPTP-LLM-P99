@@ -6,7 +6,7 @@ Formal verification of the 99 Prolog Problems using LPTP (Logic Program Theorem 
 
 ## Reference
 
-Read `/Users/fred/Desktop/P99/lptp-reference.md` before writing or debugging any `.pr` file. Update this reference if a new proof tip has been found.
+Read `lptp-reference.md`, at the root of this repository, before writing or debugging any `.pr` file. Update this reference if a new proof tip has been found.
 
 ## Structure
 

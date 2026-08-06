@@ -150,9 +150,14 @@ A `.gr` file declares these ground clauses using `assert_clauses/2`:
 The Prolog source:
 
 ```prolog
-my_last_but_one(X, [X, _]).
-my_last_but_one(X, [_ | T]) :- my_last_but_one(X, T).
+my_last_but_one(X, [X, Y]).
+my_last_but_one(X, [Y | T]) :- my_last_but_one(X, T).
 ```
+
+Note the named `Y` in both clauses even though it is never used again: that
+is what keeps the ground representation free of existentials, as explained
+under *Avoid anonymous variables* in section 10. Writing `_Y` instead also
+works and stops SWI-Prolog from reporting a singleton variable.
 
 Its ground representation:
 
@@ -277,6 +282,41 @@ Also in separate modules under `lib/list/`:
 - `suffix.pr` (suffix relation)
 
 ## 10. Common Pitfalls
+
+### Operator atoms in lemma names need brackets
+
+Lemma names are built with `:`, and GNU Prolog refuses an atom that is also
+an operator when it appears bare as an operand. The whole file then fails to
+parse, with a message that names a character position rather than the cause:
+
+```
+uncaught exception: error(syntax_error('.../gcd.pr:12 (char:13)
+  current or previous operator needs brackets'),read/2)
+```
+
+**Fix**: bracket the offending atom. The term is unchanged, and this is the
+form LPTP's own writer emits into `.thm` files.
+
+```prolog
+:- lemma(gcd:div, ...).      % fails to parse
+:- lemma(gcd:(div), ...).    % same term, parses
+```
+
+The atoms to watch for, from GNU Prolog and from LPTP's `op.pl`:
+
+```
+all  and  by  def  div  ex  fails  imp  is  mod
+neg  not  or  rem  succeeds  terminates
+```
+
+Only bare operands are affected. An operator used *as* an operator is fine,
+so `all x: succeeds foo(?x)` needs nothing.
+
+This bites whenever a problem's natural vocabulary collides with that list —
+P32 (`gcd`, whose divisibility lemmas want to be called `div:something`) is
+the first place it shows up. SICStus and SWI-Prolog accept the bare form, so
+a proof that checks elsewhere can still fail here; the LPTP library itself
+carried three such names until they were bracketed.
 
 ### Variable shadowing in existentials
 
