@@ -4,7 +4,7 @@
 * Install [LPTP](https://github.com/FredMesnard/LPTP) locally and compile it with Gnu-Prolog
 * Read chapter 1 of the user manual
 * Install [SWI-Prolog](https://www.swi-prolog.org/Download.html)
-* Download this repository `LPTP-LLM-P99`and decompress it
+* Download this repository `LPTP-LLM-P99` and decompress it
 * Update the file `CLAUDE.md` wrt your installation
 * Update the file `lptp-reference.md` wrt your installation
 * Point Claude to your local copy of `LPTP-LLM-P99-main`
