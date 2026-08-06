@@ -283,7 +283,7 @@ Also in separate modules under `lib/list/`:
 
 ## 10. Common Pitfalls
 
-### Operator atoms in lemma names need brackets
+### Operator atoms in lemma names break GNU Prolog
 
 Lemma names are built with `:`, and GNU Prolog refuses an atom that is also
 an operator when it appears bare as an operand. The whole file then fails to
@@ -294,13 +294,27 @@ uncaught exception: error(syntax_error('.../gcd.pr:12 (char:13)
   current or previous operator needs brackets'),read/2)
 ```
 
-**Fix**: bracket the offending atom. The term is unchanged, and this is the
-form LPTP's own writer emits into `.thm` files.
+**Better fix**: pick a name that is not an operator. `divisor` instead of
+`div` costs nothing and the question never arises again.
+
+```prolog
+:- definition_pred(divisor,2, ...).
+:- lemma(divisor:plus, ...).
+:- lemma(gcd:divisor, ...).
+```
+
+**Fix in place**: when the name is fixed — a library predicate, or a proof
+you would rather not rewrite — bracket the offending atom. The term is
+unchanged, and this is the form LPTP's own writer emits into `.thm` files.
 
 ```prolog
 :- lemma(gcd:div, ...).      % fails to parse
 :- lemma(gcd:(div), ...).    % same term, parses
 ```
+
+Renaming the predicate without renaming the lemmas leaves you with the worst
+of both: brackets carried for a name that no longer matches what it is about.
+Rename them together.
 
 The atoms to watch for, from GNU Prolog and from LPTP's `op.pl`:
 
